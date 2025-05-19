@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('status')->default(true);
             $table->unique(['user_id', 'course_id']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +28,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('enrollments');
+        Schema::table('enrollments', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

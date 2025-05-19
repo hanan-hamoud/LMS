@@ -20,6 +20,7 @@ return new class extends Migration
             $table->boolean('is_preview')->default(false);
             $table->integer('order')->default(1);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +29,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lessons');
+        Schema::table('lessons', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

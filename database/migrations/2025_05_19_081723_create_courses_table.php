@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('instructor_id');
             $table->boolean('status')->default(true);
             $table->timestamps();
+            $table->softDeletes();
             // $table->foreign('category_id')->references('id')->on('course_categories')->onDelete('cascade');
             // $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
         });
@@ -29,6 +30,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courses');
+        Schema::table('courses', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

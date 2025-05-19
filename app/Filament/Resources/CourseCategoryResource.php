@@ -9,35 +9,39 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Support\Str;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\IconColumn;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 class CourseCategoryResource extends Resource
 {
     protected static ?string $model = CourseCategory::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Course Categories';
+    protected static ?string $pluralModelLabel = 'Course Categories';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')
+                Forms\Components\TextInput::make('name')
                     ->required()
                     ->unique(ignoreRecord: true)
-                    ->reactive()
-                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state)))
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (callable $set, $state) {
+                        $set('slug', Str::slug($state));
+                    }),
 
-                TextInput::make('slug')
+                Forms\Components\TextInput::make('slug')
                     ->required()
+                    ->disabled()
                     ->maxLength(255),
 
-                Toggle::make('status')
-                    ->required(),
+                Forms\Components\Toggle::make('status')
+                    ->label('Active')
+                    ->default(true),
             ]);
     }
 
@@ -45,48 +49,56 @@ class CourseCategoryResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')
+                Tables\Columns\TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
 
-                TextColumn::make('slug')
+                Tables\Columns\TextColumn::make('slug')
+                    ->sortable()
                     ->searchable(),
 
-                IconColumn::make('status')
-                    ->boolean(),
+                Tables\Columns\IconColumn::make('status')
+                    ->boolean()
+                    ->label('Active'),
 
-                TextColumn::make('created_at')
+                Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Created'),
 
-                TextColumn::make('updated_at')
+                Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Updated'),
             ])
             ->filters([
                 SelectFilter::make('status')
-                ->label('Status')
-                ->options([
-                    1 => 'Active',
-                    0 => 'Inactive',
-                ]),
+                    ->label('Filter by Status')
+                    ->options([
+                        1 => 'Active',
+                        0 => 'Inactive',
+                    ]),
+                    Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
+          
+
             ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -97,4 +109,11 @@ class CourseCategoryResource extends Resource
             'edit' => Pages\EditCourseCategory::route('/{record}/edit'),
         ];
     }
+    public static function getEloquentQuery(): Builder
+{
+    return parent::getEloquentQuery()->withoutGlobalScopes([
+        SoftDeletingScope::class,
+    ]);
+}
+
 }
