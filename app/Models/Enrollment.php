@@ -20,6 +20,21 @@ class Enrollment extends Model
         'status' => 'boolean',
     ];
 
+    protected static function booted()
+{
+    static::creating(function ($enrollment) {
+        $exists = self::where('user_id', $enrollment->user_id)
+                      ->where('course_id', $enrollment->course_id)
+                      ->exists();
+        if ($exists) {
+            throw ValidationException::withMessages([
+                'user_id' => 'This user is already enrolled in the selected course.',
+            ]);
+        }
+    });
+}
+
+
     public function user()
     {
         return $this->belongsTo(User::class);
