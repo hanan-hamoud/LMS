@@ -14,7 +14,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
-
+use Filament\Tables\Filters\SelectFilter;
 class CourseCategoryResource extends Resource
 {
     protected static ?string $model = CourseCategory::class;
@@ -65,7 +65,12 @@ class CourseCategoryResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                ->label('Status')
+                ->options([
+                    1 => 'Active',
+                    0 => 'Inactive',
+                ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

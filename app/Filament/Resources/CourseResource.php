@@ -12,7 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
+use Filament\Tables\Filters\SelectFilter;
 class CourseResource extends Resource
 {
     protected static ?string $model = Course::class;
@@ -64,7 +64,9 @@ class CourseResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('category_id')
+                ->label('Category')
+                ->relationship('category', 'name'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
