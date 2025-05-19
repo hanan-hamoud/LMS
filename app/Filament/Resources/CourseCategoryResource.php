@@ -13,8 +13,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-
-class CourseCategoryResource extends Resource
+use App\Filament\Resources\BaseResource;
+class CourseCategoryResource extends BaseResource
 {
     protected static ?string $model = CourseCategory::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -111,11 +111,6 @@ class CourseCategoryResource extends Resource
             'edit' => Pages\EditCourseCategory::route('/{record}/edit'),
         ];
     }
-    public static function getEloquentQuery(): Builder
-{
-    return parent::getEloquentQuery()->withoutGlobalScopes([
-        SoftDeletingScope::class,
-    ]);
-}
+
 
 }
