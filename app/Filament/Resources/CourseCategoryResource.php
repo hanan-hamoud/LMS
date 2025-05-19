@@ -59,16 +59,18 @@ class CourseCategoryResource extends Resource
 
                 Tables\Columns\IconColumn::make('status')
                     ->boolean()
+                    ->searchable()
                     ->label('Active'),
-
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
+                    ->searchable()
                     ->label('Created'),
 
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
+                    ->searchable()
                     ->label('Updated'),
             ])
             ->filters([
