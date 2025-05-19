@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Filament\Pages;
+
+use App\Models\Course;
+use App\Models\Lesson;
+use App\Models\Enrollment;
+use Filament\Pages\Page;
+
+class Dashboard extends Page
+{
+    protected static string $view = 'filament.pages.dashboard';
+
+    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
+    protected static ?string $navigationLabel = 'لوحة التحكم';
+    protected static ?string $title = 'لوحة التحكم';
+
+    public $courseCount;
+    public $lessonCount;
+    public $enrollmentCount;
+
+    public function mount(): void
+    {
+        $this->courseCount = Course::count();
+        $this->lessonCount = Lesson::count();
+        $this->enrollmentCount = Enrollment::count();
+    }
+}
