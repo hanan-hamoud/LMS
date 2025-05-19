@@ -45,4 +45,36 @@ class CoursesTest extends TestCase
             'status' => true,
         ]);
     }
+
+    /** @test */
+public function a_course_belongs_to_an_instructor_and_category()
+{
+    $instructor = \App\Models\Instructor::create([
+        'name' => 'Hanan',
+        'email' => 'hanan2001hamoud@gmail.com',
+        'bio' => 'she is a programmer',
+        'photo' => 'photo.png',
+        'status' => true,
+    ]);
+
+    $category = \App\Models\CourseCategory::create([
+        'name' => 'Programming',
+        'slug' => 'programming',
+        'status' => true,
+    ]);
+
+    $course = \App\Models\Course::create([
+        'title' => 'PHP Course',
+        'description' => 'Start from scratch',
+        'category_id' => $category->id,
+        'instructor_id' => $instructor->id,
+        'status' => true,
+    ]);
+
+    $loadedCourse = \App\Models\Course::with(['instructor', 'category'])->find($course->id);
+
+    $this->assertEquals('Hanan', $loadedCourse->instructor->name);
+    $this->assertEquals('Programming', $loadedCourse->category->name);
+}
+
 }

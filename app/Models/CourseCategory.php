@@ -15,4 +15,8 @@ class CourseCategory extends Model
             $category->slug = Str::slug($category->name);
         });
     }
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'category_id');
+    }
 }

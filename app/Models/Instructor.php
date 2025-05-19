@@ -9,5 +9,9 @@ class Instructor extends Model
     protected $fillable = ['name', 'email', 'bio', 'photo', 'status'];
 
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 
 }
