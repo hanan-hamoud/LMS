@@ -9,17 +9,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class CourseCategoryFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
-            'slug' => $this->faker->slug(),
-            'status' => true,
+            'name' => fake()->word(),
+            'slug' => fake()->slug(),
+            'status' => $this->faker->boolean,
         ];
     }
 }

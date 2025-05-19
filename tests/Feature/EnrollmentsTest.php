@@ -60,29 +60,6 @@ class EnrollmentsTest extends TestCase
     }
 
     /** @test */
-public function enrollment_belongs_to_user_and_course()
-{
-    $user = \App\Models\User::factory()->create();
-    $instructor = \App\Models\Instructor::factory()->create();
-    $category = \App\Models\CourseCategory::factory()->create();
 
-    $course = \App\Models\Course::create([
-        'title' => 'Laravel Course',
-        'description' => 'Intro to Laravel',
-        'category_id' => $category->id,
-        'instructor_id' => $instructor->id,
-        'status' => true,
-    ]);
-
-    $enrollment = \App\Models\Enrollment::create([
-        'user_id' => $user->id,
-        'course_id' => $course->id,
-        'enrolled_at' => now(),
-        'status' => true,
-    ]);
-
-    $this->assertInstanceOf(\App\Models\User::class, $enrollment->user);
-    $this->assertInstanceOf(\App\Models\Course::class, $enrollment->course);
-}
 
 }

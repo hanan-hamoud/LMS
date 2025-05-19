@@ -16,6 +16,7 @@ class Lesson extends Model
         'is_preview',
         'order',
     ];
+    
 
     public function course()
     {

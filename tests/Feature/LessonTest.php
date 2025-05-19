@@ -56,30 +56,30 @@ class LessonTest extends TestCase
     }
 
      /** @test */
-     public function lesson_belongs_to_course()
-     {
-         $instructor = Instructor::factory()->create();
-         $category = CourseCategory::factory()->create();
- 
-         $course = Course::create([
-             'title' => 'Intro to PHP',
-             'description' => 'Basics',
-             'category_id' => $category->id,
-             'instructor_id' => $instructor->id,
-             'status' => true,
-         ]);
- 
-         $lesson = Lesson::create([
-             'course_id' => $course->id,
-             'title' => 'First Lesson',
-             'description' => 'Lesson description',
-             'video_url' => 'https://video.com/lesson1',
-             'is_preview' => true,
-             'order' => 1,
-         ]);
- 
-         $this->assertInstanceOf(Course::class, $lesson->course);
-         $this->assertEquals($course->id, $lesson->course->id);
-     }
+    public function lesson_belongs_to_course()
+    {
+        $instructor = Instructor::factory()->create();
+        $category = CourseCategory::factory()->create();
+
+        $course = Course::create([
+            'title' => 'Intro to PHP',
+            'description' => 'Basics',
+            'category_id' => $category->id,
+            'instructor_id' => $instructor->id,
+            'status' => true,
+        ]);
+
+        $lesson = Lesson::create([
+            'course_id' => $course->id,
+            'title' => 'First Lesson',
+            'description' => 'Lesson description',
+            'video_url' => 'https://video.com/lesson1',
+            'is_preview' => true,
+            'order' => 1,
+        ]);
+
+        $this->assertInstanceOf(Course::class, $lesson->course);
+        $this->assertEquals($course->id, $lesson->course->id);
+    }
 }
 
