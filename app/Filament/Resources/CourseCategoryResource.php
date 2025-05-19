@@ -3,15 +3,17 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CourseCategoryResource\Pages;
-use App\Filament\Resources\CourseCategoryResource\RelationManagers;
 use App\Models\CourseCategory;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 
 class CourseCategoryResource extends Resource
 {
@@ -23,13 +25,18 @@ class CourseCategoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
+                    ->required()
+                    ->unique(ignoreRecord: true)
+                    ->reactive()
+                    ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state)))
+                    ->maxLength(255),
+
+                TextInput::make('slug')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\Toggle::make('status')
+
+                Toggle::make('status')
                     ->required(),
             ]);
     }
@@ -38,27 +45,21 @@ class CourseCategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->reactive()
-                    ->afterStateUpdated(fn ($set, $state) => $set('slug', Str::slug($state))),
-                Tables\Columns\TextColumn::make('slug')
-                    ->searchable()
-                    ->required(),
-                    TextInput::make('name'),
+                TextColumn::make('name')
+                    ->searchable(),
 
+                TextColumn::make('slug')
+                    ->searchable(),
 
-
-
-                Tables\Columns\IconColumn::make('status')
+                IconColumn::make('status')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
+
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+
+                TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
