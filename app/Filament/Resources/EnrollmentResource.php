@@ -10,8 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\ValidationException;
-use Filament\Notifications\Notification;
+use Filament\Forms\Get;
 
 class EnrollmentResource extends Resource
 {
@@ -26,36 +25,48 @@ class EnrollmentResource extends Resource
                     ->relationship('user', 'name')
                     ->required()
                     ->searchable()
-                    ->preload()
-                    ->rules([
-                        function () {
-                            return Rule::unique('enrollments', 'user_id')
-                                ->where('course_id', request('course_id'))
-                                ->ignore(request()->route('record'));
-                        }
-                    ]),
-                    
+                    ->preload(),
+                
                 Forms\Components\Select::make('course_id')
                     ->relationship('course', 'title')
                     ->required()
                     ->searchable()
                     ->preload()
+                    ->label('المقرر')
+                    ->helperText('لا يمكن تكرار تسجيل نفس المستخدم في نفس المقرر.')
                     ->rules([
-                        function () {
-                            return Rule::unique('enrollments', 'course_id')
-                                ->where('user_id', request('user_id'))
-                                ->ignore(request()->route('record'));
-                        }
+                        function (Get $get, ?Enrollment $record) {
+                            return function (string $attribute, $value, $fail) use ($get, $record) {
+                                $userId = $get('user_id');
+                                $courseId = $value;
+                                
+                                if (!$userId || !$courseId) {
+                                    return;
+                                }
+                                
+                                $query = Enrollment::where('user_id', $userId)
+                                    ->where('course_id', $courseId);
+                                
+                                if ($record) {
+                                    $query->where('id', '!=', $record->id);
+                                }
+                                
+                                if ($query->exists()) {
+                                    $fail('هذا المستخدم مسجل بالفعل في هذا المقرر.');
+                                }
+                            };
+                        },
                     ]),
-                    
+
                 Forms\Components\DateTimePicker::make('enrolled_at')
                     ->default(now()),
-                    
+
                 Forms\Components\Toggle::make('status')
-                    ->required()
-                    ->default(true),
+                    ->default(true)
+                    ->label('فعال؟'),
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
@@ -64,22 +75,22 @@ class EnrollmentResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->sortable()
                     ->searchable(),
-                    
+
                 Tables\Columns\TextColumn::make('course.title')
                     ->sortable()
                     ->searchable(),
-                    
+
                 Tables\Columns\TextColumn::make('enrolled_at')
                     ->dateTime()
                     ->sortable(),
-                    
+
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
-                    
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),
-                    
+
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -114,52 +125,5 @@ class EnrollmentResource extends Resource
             'create' => Pages\CreateEnrollment::route('/create'),
             'edit' => Pages\EditEnrollment::route('/{record}/edit'),
         ];
-    }
-
-    public static function mutateFormDataBeforeCreate(array $data): array
-    {
-        $exists = Enrollment::where('user_id', $data['user_id'])
-            ->where('course_id', $data['course_id'])
-            ->exists();
-
-        if ($exists) {
-            Notification::make()
-                ->title('خطأ في التسجيل')
-                ->body('هذا المستخدم مسجل بالفعل في هذا المقرر.')
-                ->danger()
-                ->send();
-                
-            throw ValidationException::withMessages([
-                'user_id' => 'هذا المستخدم مسجل بالفعل في هذا المقرر',
-                'course_id' => 'هذا المقرر مسجل بالفعل لهذا المستخدم',
-            ]);
-        }
-
-        return $data;
-    }
-
-    public static function mutateFormDataBeforeSave(array $data): array
-    {
-        $recordId = request()->route('record');
-
-        $exists = Enrollment::where('user_id', $data['user_id'])
-            ->where('course_id', $data['course_id'])
-            ->when($recordId, fn ($query) => $query->where('id', '!=', $recordId))
-            ->exists();
-
-        if ($exists) {
-            Notification::make()
-                ->title('خطأ في التحديث')
-                ->body('هذا المستخدم مسجل بالفعل في هذا المقرر.')
-                ->danger()
-                ->send();
-                
-            throw ValidationException::withMessages([
-                'user_id' => 'هذا المستخدم مسجل بالفعل في هذا المقرر',
-                'course_id' => 'هذا المقرر مسجل بالفعل لهذا المستخدم',
-            ]);
-        }
-
-        return $data;
     }
 }
