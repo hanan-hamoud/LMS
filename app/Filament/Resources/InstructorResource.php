@@ -45,7 +45,8 @@ class InstructorResource extends BaseResource
                     ->maxLength(255),
                 FileUpload::make('photo')
                 ->label('photo')
-                ->directory('ins-imge')
+                ->storeFiles()
+                ->directory('instructors')
                 ->image()
                 ->imagePreviewHeight('100')
                 ->maxSize(2048),
