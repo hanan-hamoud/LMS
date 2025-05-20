@@ -13,7 +13,6 @@ use App\Filament\Resources\CourseResource\Pages\EditCourse;
 use App\Filament\Resources\CourseResource\Pages\ListCourses;
 use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Auth;
-
 class CourseResourceTest extends TestCase
 {
     use RefreshDatabase;

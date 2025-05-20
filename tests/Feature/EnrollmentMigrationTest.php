@@ -8,20 +8,18 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\QueryException;
 use App\Models\Enrollment;
+use PHPUnit\Framework\Attributes\Test;
 class EnrollmentMigrationTest extends TestCase
 {
-    /**
-     * A basic feature test example.
-     */
+    
     use RefreshDatabase;
 
-    /** @test */
+    #[test]
     public function database_has_courses_table()
     {
         $this->assertTrue(Schema::hasTable('enrollments'), 'جدول enrollments غير موجود!');
     }
-
-    /** @test */
+#[test]
     public function courses_table_has_expected_columns()
     {
         $columns =  [

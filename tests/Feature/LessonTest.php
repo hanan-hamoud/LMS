@@ -8,12 +8,12 @@ use App\Models\Course;
 use App\Models\CourseCategory;
 use App\Models\Instructor;
 use App\Models\Lesson;
-
+use PHPUnit\Framework\Attributes\Test;
 class LessonTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[test]
     public function it_can_create_a_lesson()
     {
         $instructor = Instructor::create([
@@ -55,7 +55,7 @@ class LessonTest extends TestCase
         ]);
     }
 
-     /** @test */
+     #[test]
     public function lesson_belongs_to_course()
     {
         $instructor = Instructor::factory()->create();

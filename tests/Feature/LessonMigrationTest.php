@@ -7,21 +7,17 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\QueryException;
 use Tests\TestCase;
 use App\Models\Lesson;
-
+use PHPUnit\Framework\Attributes\Test;
 class LessonMigrationTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * A basic feature test example.
-     */
-  
-    /** @test */
+    #[test]
     public function database_has_lessons_table()
     {
         $this->assertTrue(Schema::hasTable('lessons'), 'جدول lessons غير موجود!');
     }
 
-    /** @test */
+  #[test]
     public function lessons_table_has_expected_columns()
     {
         $columns =[

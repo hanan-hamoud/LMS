@@ -6,14 +6,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Instructor; 
+use PHPUnit\Framework\Attributes\Test;
 class InstructorTest  extends TestCase
 {
 
     use RefreshDatabase;
-    /**
-     * A basic feature test example.
-     */
-     /** @test */
+    #[test]
      public function it_can_create_instructor()
      {
          Instructor::create([

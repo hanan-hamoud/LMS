@@ -8,19 +8,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Tests\TestCase;
 use App\Models\CourseCategory;
-
+use PHPUnit\Framework\Attributes\Test;
 
 class CourseCategoriesMigrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[test]
     public function database_has_course_categories_table()
     {
         $this->assertTrue(Schema::hasTable('course_categories'), 'جدول course_categories غير موجود!');
     }
 
-    /** @test */
+   #[test]
     public function course_categories_table_has_expected_columns()
     {
         $columns = ['id', 'name', 'slug', 'status', 'created_at', 'updated_at'];
@@ -32,7 +32,7 @@ class CourseCategoriesMigrationTest extends TestCase
         }
     }
 
-    /** @test */
+  #[test]
     public function name_is_unique_in_course_categories()
     {
         CourseCategory::create(['name' => 'UniqueName', 'slug' => 'unique-slug']);

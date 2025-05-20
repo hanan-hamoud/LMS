@@ -7,18 +7,18 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\QueryException;
 use Tests\TestCase;
 use App\Models\Instructor;
-
+use PHPUnit\Framework\Attributes\Test;
 class InstructorMigrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+   #[test]
     public function database_has_instructors_table()
     {
         $this->assertTrue(Schema::hasTable('instructors'), 'جدول instructors غير موجود!');
     }
 
-    /** @test */
+    #[test]
     public function instructors_table_has_expected_columns()
     {
         $columns =  ['name', 'email', 'bio', 'photo', 'status'];
@@ -30,7 +30,7 @@ class InstructorMigrationTest extends TestCase
         }
     }
 
-    /** @test */
+   #[test]
     public function email_is_unique_in_instructors()
     {
         Instructor::create([

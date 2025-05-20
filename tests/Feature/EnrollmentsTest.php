@@ -9,12 +9,12 @@ use App\Models\Instructor;
 use App\Models\CourseCategory;
 use App\Models\Course;
 use App\Models\Enrollment;
-
+use PHPUnit\Framework\Attributes\Test;
 class EnrollmentsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[test]
     public function it_can_create_an_enrollment()
     {
         $user = User::create([
@@ -59,7 +59,7 @@ class EnrollmentsTest extends TestCase
         ]);
     }
 
-    /** @test */
+   
 
 
 }
