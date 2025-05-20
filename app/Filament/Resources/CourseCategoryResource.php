@@ -34,14 +34,18 @@ class CourseCategoryResource extends BaseResource
                         $set('slug', Str::slug($state));
                     }),
 
-                Forms\Components\TextInput::make('slug')
+                    Forms\Components\TextInput::make('slug')
                     ->required()
-                    ->disabled()
+                    ->readonly()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
+                
 
-                Forms\Components\Toggle::make('status')
+                    Forms\Components\Toggle::make('status')
                     ->label('Active')
+                    ->required()
                     ->default(true),
+                
             ]);
     }
 
@@ -86,6 +90,7 @@ class CourseCategoryResource extends BaseResource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

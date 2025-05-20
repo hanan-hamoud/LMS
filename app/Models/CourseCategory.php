@@ -14,13 +14,13 @@ class CourseCategory extends Model
 
     protected static function booted()
     {
-        static::creating(function ($model) {
-            if (empty($model->slug)) {
-                $model->slug = Str::slug($model->name);
+        static::saving(function ($category) {
+            if ($category->isDirty('name')) {
+                $category->slug = \Str::slug($category->name);
             }
         });
     }
-
+    
     public function courses()
     {
         return $this->hasMany(Course::class, 'category_id');

@@ -73,5 +73,51 @@ public function status_is_required()
         'status' => null,
     ]);
 }
+#[Test]
+public function it_can_be_soft_deleted()
+{
+    $category = CourseCategory::create([
+        'name' => 'Biology',
+        'status' => true,
+    ]);
+
+    $category->delete();
+
+    $this->assertSoftDeleted('course_categories', [
+        'id' => $category->id,
+    ]);
+}
+#[Test]
+public function it_does_not_allow_duplicate_slug()
+{
+    CourseCategory::create([
+        'name' => 'Physics',
+        'status' => true,
+    ]);
+
+    $this->expectException(\Illuminate\Database\QueryException::class);
+
+    CourseCategory::create([
+        'name' => 'Physics', 
+        'status' => true,
+    ]);
+}
+
+
+
+#[Test]
+public function it_updates_slug_when_name_is_updated()
+{
+    $category = CourseCategory::create([
+        'name' => 'Old Name',
+        'status' => true,
+    ]);
+
+    $category->update(['name' => 'New Name']);
+
+    $this->assertEquals('new-name', $category->slug);
+}
+
+
 
 }

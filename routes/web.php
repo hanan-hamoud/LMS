@@ -14,3 +14,4 @@ Route::get('/change-locale', function () {
     return back();
 })->name('change-locale');
 
+Route::get('/login', fn () => 'Login Page')->name('login');
