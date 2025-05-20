@@ -10,6 +10,8 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use App\Filament\Resources\EnrollmentResource\Pages\CreateEnrollment;
 use App\Filament\Resources\EnrollmentResource\Pages\EditEnrollment;
+use App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments;
+
 use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
@@ -23,8 +25,15 @@ class EnrollmentResourceTest extends TestCase
         $this->actingAs($admin);
         return $admin;
     }
-
+    #[Test]
   
+    public function it_can_list_enrollment()
+    {
+        $enrollment = Enrollment::factory()->count(10)->create();
+    
+        Livewire::test(\App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments::class)
+            ->assertCanSeeTableRecords($enrollment);
+    }
    
 
     #[Test]

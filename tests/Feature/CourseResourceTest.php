@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use App\Filament\Resources\CourseResource\Pages\CreateCourse;
 use App\Filament\Resources\CourseResource\Pages\EditCourse;
+use App\Filament\Resources\CourseResource\Pages\ListCourses;
 use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,7 +24,16 @@ class CourseResourceTest extends TestCase
         $this->actingAs($admin);
         return $admin;
     }
-   
+    #[Test]
+    public function it_can_list_courses()
+    {
+        $courses = Course::factory()->count(10)->create();
+    
+        Livewire::test(\App\Filament\Resources\CourseResource\Pages\ListCourses::class)
+            ->assertCanSeeTableRecords($courses);
+    }
+    
+
     #[Test]
     public function it_can_create_a_new_course(): void
     {
@@ -102,18 +112,6 @@ class CourseResourceTest extends TestCase
     }
 
 
-    #[Test]
-public function it_can_render_the_index_page_of_courses(): void
-{
-    $this->actingAsAdmin();
-    $course = Course::factory()->create([
-        'title' => 'Laravel Advanced',
-    ]);
-    $response = $this->get('/admin/courses');
-    $response->assertOk();
-    $response->assertSee('Courses'); 
-    $response->assertSee('Laravel Advanced'); 
-}
 
 }
 

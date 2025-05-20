@@ -26,6 +26,15 @@ class InstructorResourceTest extends TestCase
         $this->actingAs($admin);
         return $admin;
     }
+
+    #[Test]
+    public function it_can_list_instructor()
+    {
+        $instructor = Instructor::factory()->count(10)->create();
+    
+        Livewire::test(\App\Filament\Resources\InstructorResource\Pages\ListInstructors::class)
+            ->assertCanSeeTableRecords($instructor);
+    }
  
     #[Test]
     public function it_can_create_a_new_instructor(): void

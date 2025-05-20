@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use App\Filament\Resources\CourseCategoryResource\Pages\CreateCourseCategory;
 use App\Filament\Resources\CourseCategoryResource\Pages\EditCourseCategory;
+use App\Filament\Resources\CourseCategoryResource\Pages\ListCourseCategory;
 use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Auth;
 class CourseCategoryResourceTest extends TestCase
@@ -23,15 +24,14 @@ class CourseCategoryResourceTest extends TestCase
         return $admin;
     }
 
-      /** @test */
-      public function it_can_render_the_index_page_of_course_categories(): void
-      {
-        $this->actingAsAdmin();
-        $response = $this->get('/admin/course-categories');
-        $response->assertOk();
-       $response->assertSee('Course Categories');
-    
-      }
+    public function it_can_list_course_categories()
+    {
+        $courseCategory = CourseCategory::factory()->count(10)->create();
+
+        Livewire::test(ListCourseCategory::class)
+            ->assertCanSeeTableRecords($courseCategory);
+    }
+
   
     
 

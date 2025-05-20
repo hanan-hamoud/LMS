@@ -24,6 +24,14 @@ class LessonResourceTest extends TestCase
     $this->actingAs($admin);
     return $admin;
 }
+#[Test]
+public function it_can_list_lesson()
+{
+    $lesson = Lesson::factory()->count(10)->create();
+
+    Livewire::test(\App\Filament\Resources\LessonResource\Pages\ListLessons::class)
+        ->assertCanSeeTableRecords($lesson);
+}
 
     #[Test]
     public function it_can_create_a_new_lesson(): void
