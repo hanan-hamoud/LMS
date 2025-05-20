@@ -49,5 +49,9 @@ class User extends Authenticatable
 {
     return $this->hasMany(Enrollment::class);
 }
+public function canAccessFilament(): bool
+{
+    return true; 
+}
 
 }
