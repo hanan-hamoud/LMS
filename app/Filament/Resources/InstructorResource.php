@@ -13,6 +13,8 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\BaseResource;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Columns\ImageColumn;
 class InstructorResource extends BaseResource
 {
     protected static ?string $model = Instructor::class;
@@ -34,9 +36,12 @@ class InstructorResource extends BaseResource
                 Forms\Components\TextInput::make('bio')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('photo')
-                    ->required()
-                    ->maxLength(255),
+                FileUpload::make('photo')
+                ->label('photo')
+                ->directory('ins-imge')
+                ->image()
+                ->imagePreviewHeight('100')
+                ->maxSize(2048),
                 Forms\Components\Toggle::make('status')
                     ->required(),
             ]);
@@ -52,8 +57,12 @@ class InstructorResource extends BaseResource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('bio')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('photo')
-                    ->searchable(),
+                    ImageColumn::make('photo')
+                    ->label('الصورة')
+                    ->disk('public') 
+                    ->height(60)
+                    ->width(60)
+                    ->circular(),
                 Tables\Columns\IconColumn::make('status')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -85,7 +94,7 @@ class InstructorResource extends BaseResource
     public static function getRelations(): array
     {
         return [
-            //
+           
         ];
     }
 
