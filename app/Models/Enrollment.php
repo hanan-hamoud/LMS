@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes; 
+use Illuminate\Validation\ValidationException;
 class Enrollment extends Model
 {
     use HasFactory, SoftDeletes;
@@ -21,19 +22,7 @@ class Enrollment extends Model
         'status' => 'boolean',
     ];
 
-    protected static function booted()
-{
-    static::creating(function ($enrollment) {
-        $exists = self::where('user_id', $enrollment->user_id)
-                      ->where('course_id', $enrollment->course_id)
-                      ->exists();
-        if ($exists) {
-            throw ValidationException::withMessages([
-                'user_id' => 'This user is already enrolled in the selected course.',
-            ]);
-        }
-    });
-}
+    
 
 
     public function user()

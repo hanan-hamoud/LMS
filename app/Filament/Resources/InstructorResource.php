@@ -28,11 +28,18 @@ class InstructorResource extends BaseResource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
+                    Forms\Components\TextInput::make('email')
+                    ->label('البريد الإلكتروني')
                     ->required()
                     ->email()
-                    ->unique(ignoreRecord: true),
+                    ->unique('instructors', 'email', ignoreRecord: true)
+                    ->maxLength(255)
+                    ->validationMessages([
+                        'required' => 'يرجى إدخال البريد الإلكتروني',
+                        'email' => 'تنسيق البريد الإلكتروني غير صالح',
+                        'unique' => 'هذا البريد الإلكتروني مستخدم بالفعل',
+                    ]),
+                
                 Forms\Components\TextInput::make('bio')
                     ->required()
                     ->maxLength(255),
