@@ -7,9 +7,9 @@ use App\Models\Lesson;
 use App\Models\Enrollment;
 use Filament\Pages\Page;
 
-class Dashboard extends Page
+class ControlPanel extends Page
 {
-    protected static string $view = 'filament.pages.dashboard';
+    protected static string $view = 'filament.pages.ControlPanel';
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
     protected static ?string $navigationLabel = 'control panel';
