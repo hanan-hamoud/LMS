@@ -20,8 +20,7 @@ return new class extends Migration
             $table->boolean('status')->default(true);
             $table->timestamps();
             $table->softDeletes();
-            // $table->foreign('category_id')->references('id')->on('course_categories')->onDelete('cascade');
-            // $table->foreign('instructor_id')->references('id')->on('instructors')->onDelete('cascade');
+           
         });
     }
 
