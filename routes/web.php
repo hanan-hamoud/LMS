@@ -7,11 +7,11 @@ Route::get('/', function () {
 });
 
 
-Route::get('/change-locale', function () {
-    $newLocale = session('locale') === 'ar' ? 'en' : 'ar';
-    session(['locale' => $newLocale]);
-    app()->setLocale($newLocale);
-    return back();
-})->name('change-locale');
+// Route::get('/change-locale', function () {
+//     $newLocale = session('locale') === 'ar' ? 'en' : 'ar';
+//     session(['locale' => $newLocale]);
+//     app()->setLocale($newLocale);
+//     return back();
+// })->name('change-locale');
 
 Route::get('/login', fn () => 'Login Page')->name('login');

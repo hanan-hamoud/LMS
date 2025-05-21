@@ -12,8 +12,8 @@ class Dashboard extends Page
     protected static string $view = 'filament.pages.dashboard';
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
-    protected static ?string $navigationLabel = 'لوحة التحكم';
-    protected static ?string $title = 'لوحة التحكم';
+    protected static ?string $navigationLabel = 'control panel';
+    protected static ?string $title = 'control panel ';
 
     public $courseCount;
     public $lessonCount;

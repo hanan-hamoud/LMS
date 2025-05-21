@@ -17,7 +17,8 @@ use App\Filament\Resources\BaseResource;
 class CourseCategoryResource extends BaseResource
 {
     protected static ?string $model = CourseCategory::class;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
+
     protected static ?string $navigationLabel = 'Course Categories';
     protected static ?string $pluralModelLabel = 'Course Categories';
 

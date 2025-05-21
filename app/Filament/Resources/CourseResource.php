@@ -18,7 +18,8 @@ class CourseResource extends BaseResource
 {
     protected static ?string $model = Course::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-book-open';
+
 
     public static function form(Form $form): Form
     {
