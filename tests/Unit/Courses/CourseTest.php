@@ -33,5 +33,11 @@ class CourseTest extends TestCase
         $course = Course::factory()->create();
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\HasMany', $course->lessons());
     }
+
+    public function test_course_has_many_enrollments()
+    {
+        $course = Course::factory()->create();
+        $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\HasMany', $course->enrollments());
+    }
 }
 

@@ -3,7 +3,10 @@
 namespace Tests\Unit;
 
 use App\Models\Enrollment;
+use App\Models\User;
+use App\Models\Course;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class EnrollmentsTest extends TestCase
@@ -27,5 +30,41 @@ class EnrollmentsTest extends TestCase
         $enrollment = Enrollment::factory()->create();
         $this->assertInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo', $enrollment->course());
     }
-}
 
+    public function test_status_is_cast_to_boolean()
+    {
+        $user = User::factory()->create();
+        $course = Course::factory()->create();
+
+        $enrollment = Enrollment::create([
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+            'enrolled_at' => now(),
+            'status' => 1,
+        ]);
+
+        $this->assertIsBool($enrollment->status);
+        $this->assertTrue($enrollment->status);
+    }
+
+    public function test_enrolled_at_is_cast_to_datetime()
+    {
+        $user = User::factory()->create();
+        $course = Course::factory()->create();
+
+        $date = now();
+
+        $enrollment = Enrollment::create([
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+            'enrolled_at' => $date->toDateTimeString(),
+            'status' => true,
+        ]);
+
+        $this->assertInstanceOf(Carbon::class, $enrollment->enrolled_at);
+        $this->assertEquals(
+            $date->format('Y-m-d H:i'),
+            $enrollment->enrolled_at->format('Y-m-d H:i')
+        );
+    }
+}

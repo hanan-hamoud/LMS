@@ -22,4 +22,14 @@ class CourseCategoryTest extends TestCase
             $category->courses()
         );
     }
+    #[Test]
+public function test_slug_is_generated_from_name()
+{
+    $category = CourseCategory::create([
+        'name' => 'Web Development',
+    ]);
+
+    $this->assertEquals('web-development', $category->slug);
+}
+
 }
