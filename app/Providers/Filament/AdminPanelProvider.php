@@ -24,12 +24,24 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->brandName('LMS System')
             ->id('admin')
             ->path('admin')
             ->login()
             ->colors([
-              'primary' => Color::hex('#3B82F6'), 
+                'primary' => Color::hex('#3B82F6'),
+                'secondary' => Color::hex('#2563EB'),
+                'success' => Color::hex('#3B82F2'),
+                'warning' => Color::hex('#F59E0B'),
+                'danger' => Color::hex('#A1A5AB'),
+                'muted' => Color::hex('#F3F4F6'),
+                'text_primary' => Color::hex('#111827'),
+                'text_secondary' => Color::hex('#6B7280'),
+                'border' => Color::hex('#D1D5DB'),
+                'link' => Color::hex('#2563EB'),  
+            
             ])
+            
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
