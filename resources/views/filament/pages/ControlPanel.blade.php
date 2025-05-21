@@ -1,72 +1,82 @@
 <x-filament::page>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h2 class="text-lg font-semibold" style="color: #111827;">Total Courses</h2>
-            <p class="text-5xl font-extrabold mt-3" style="color: #3B82F6;">{{ $courseCount }}</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
+        {{-- Total Courses --}}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Courses</p>
+                <h3 class="text-2xl font-bold text-blue-600 mt-1">{{ $courseCount }}</h3>
+            </div>
+            <div class="bg-blue-100 dark:bg-blue-900 p-2.5 rounded-full">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M4 4h16v2H4zm0 6h10v2H4zm0 6h16v2H4z" />
+                </svg>
+            </div>
         </div>
 
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h2 class="text-lg font-semibold" style="color: #111827;">Total Lessons</h2>
-            <p class="text-5xl font-extrabold mt-3" style="color: #2563EB;">{{ $lessonCount }}</p>
+        {{-- Total Lessons --}}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Lessons</p>
+                <h3 class="text-2xl font-bold text-indigo-600 mt-1">{{ $lessonCount }}</h3>
+            </div>
+            <div class="bg-indigo-100 dark:bg-indigo-900 p-2.5 rounded-full">
+                <svg class="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 4a1 1 0 000 2h18a1 1 0 100-2H3zm0 6a1 1 0 011-1h16a1 1 0 110 2H4a1 1 0 01-1-1zm0 6a1 1 0 100 2h18a1 1 0 100-2H3z"/>
+                </svg>
+            </div>
         </div>
 
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h2 class="text-lg font-semibold" style="color: #111827;">Total Enrollments</h2>
-            <p class="text-5xl font-extrabold mt-3" style="color: #3B82F6;">{{ $enrollmentCount }}</p>
+        {{-- Total Enrollments --}}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Enrollments</p>
+                <h3 class="text-2xl font-bold text-green-600 mt-1">{{ $enrollmentCount }}</h3>
+            </div>
+            <div class="bg-green-100 dark:bg-green-900 p-2.5 rounded-full">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+        </div>
+
+        {{-- Total Users --}}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
+            <div>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Users</p>
+                <h3 class="text-2xl font-bold text-purple-600 mt-1">{{ $userCount }}</h3>
+            </div>
+            <div class="bg-purple-100 dark:bg-purple-900 p-2.5 rounded-full">
+                <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4S8 5.79 8 8s1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h3 class="text-md font-semibold" style="color: #111827;">Users</h3>
-            <p class="text-4xl font-bold mt-2" style="color: #2563EB;">{{ $userCount }}</p>
-        </div>
+{{-- Top Courses Section --}}
+<div class="mb-10">
+    <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Top 5 Popular Courses</h2>
 
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h3 class="text-md font-semibold" style="color: #111827;">Verified Users</h3>
-            <p class="text-4xl font-bold mt-2" style="color: #2563EB;">{{ $verifiedUsersCount }}</p>
-        </div>
-
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h3 class="text-md font-semibold" style="color: #111827;">Active Courses</h3>
-            <p class="text-4xl font-bold mt-2" style="color: #3B82F6;">{{ $activeCourseCount }}</p>
-        </div>
-
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h3 class="text-md font-semibold" style="color: #111827;">Active Enrollments</h3>
-            <p class="text-4xl font-bold mt-2" style="color: #3B82F6;">{{ $activeEnrollmentCount }}</p>
-        </div>
-
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h3 class="text-md font-semibold" style="color: #111827;">Categories</h3>
-            <p class="text-4xl font-bold mt-2" style="color: #2563EB;">{{ $categoryCount }}</p>
-        </div>
-
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h3 class="text-md font-semibold" style="color: #111827;">Instructors</h3>
-            <p class="text-4xl font-bold mt-2" style="color: #2563EB;">{{ $instructorCount }}</p>
-        </div>
-
-        <div class="p-6 bg-white rounded-xl shadow text-center border" style="border-color: #D1D5DB;">
-            <h3 class="text-md font-semibold" style="color: #111827;">Active Instructors</h3>
-            <p class="text-4xl font-bold mt-2" style="color: #2563EB;">{{ $activeInstructorCount }}</p>
-        </div>
-    </div>
-
-   <div class="mb-10">
-    <h2 class="text-2xl font-bold mb-6" style="color: #111827;">Top 5 Popular Courses</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 justify-center">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach($popularCourses as $course)
-            <div class="bg-white rounded-xl shadow p-4 flex flex-col justify-between border" style="border-color: #D1D5DB; max-width: 400px; margin: auto;">
-                <h3 class="text-lg font-semibold mb-1 truncate" title="{{ $course->title }}" style="color: #2563EB;">
-                    {{ $course->title }}
-                </h3>
-                <p class="text-gray-700 text-xs mb-3">
-                    Enrollments: <span class="font-bold" style="color: #3B82F6;">{{ $course->enrollments_count }}</span>
-                </p>
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
+                <div class="max-w-[75%]">
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate" title="{{ $course->title }}">
+                        {{ $course->title }}
+                    </p>
+                    <h3 class="text-xl font-bold text-blue-600 mt-1">
+                        {{ $course->enrollments_count }} Enrollments
+                    </h3>
+                </div>
+                <div class="bg-blue-100 dark:bg-blue-900 p-2.5 rounded-full shrink-0">
+                    <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14.5h-2v-2h2v2zm0-4h-2V7h2v5.5z" />
+                    </svg>
+                </div>
             </div>
         @endforeach
     </div>
 </div>
+
 
 </x-filament::page>
