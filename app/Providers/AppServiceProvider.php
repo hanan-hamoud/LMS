@@ -8,6 +8,7 @@ use Filament\Support\Assets\Theme;
 use Filament\Navigation\NavigationItem;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -20,18 +21,11 @@ class AppServiceProvider extends ServiceProvider
     
 
     
-    public function boot(): void
+    public function boot()
     {
-        Filament::serving(function () {
-            Filament::registerNavigationItems([
-                NavigationItem::make(__('تغيير اللغة'))
-                    ->url(route('change-locale'))
-                    ->icon('heroicon-o-language')
-                    ->group('الإعدادات')
-                    ->sort(1000),
-            ]);
-        });
+        App::setLocale(Session::get('locale', config('app.locale')));
     }
+    
     
     
     

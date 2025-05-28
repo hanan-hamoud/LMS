@@ -17,7 +17,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-
+//use BezhanSalleh\FilamentLanguageSwitch\FilamentLanguageSwitchPlugin;
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -63,6 +63,14 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            // ->plugins([
+            //     FilamentLanguageSwitchPlugin::make()
+            //         ->locales(['en', 'ar']),
+            // ])
+         //   ->direction(app()->getLocale() === 'ar' ? 'rtl' : 'ltr')
+         //   ->layout('vendor.filament-panels.layouts.app')
+
+          //  ->layout('layouts.filament-app')
             ->authMiddleware([
                 Authenticate::class,
             ]);

@@ -26,18 +26,23 @@ class CourseResource extends BaseResource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('title')
+                ->label(__('course.title'))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Textarea::make('description')
+                ->label(__('course.description'))
                     ->required()
                     ->columnSpanFull(),
                 Forms\Components\TextInput::make('category_id')
+                ->label(__('course.category_id'))
                     ->required()
                     ->numeric(),
                 Forms\Components\TextInput::make('instructor_id')
+                ->label(__('course.instructor_id')) 
                     ->required()
                     ->numeric(),
                 Forms\Components\Toggle::make('status')
+                ->label(__('course.status'))
                     ->required(),
             ]);
     }
@@ -47,14 +52,18 @@ class CourseResource extends BaseResource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
+                ->label(__('course.title'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category_id')
+                ->label(__('course.category_id'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('instructor_id')
+                ->label(__('course.instructor_id'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\IconColumn::make('status')
+                ->label(__('course.status'))
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

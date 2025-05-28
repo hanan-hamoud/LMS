@@ -13,6 +13,8 @@ use Filament\Pages\Page;
 
 class ControlPanel extends Page
 {
+
+
     protected static string $view = 'filament.pages.ControlPanel';
 
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
