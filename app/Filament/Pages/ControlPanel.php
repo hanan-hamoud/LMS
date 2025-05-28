@@ -21,6 +21,11 @@ class ControlPanel extends Page
     protected static ?string $navigationLabel = 'control panel';
     protected static ?string $title = 'control panel';
 
+    public static function getNavigationLabel(): string
+    {
+        return __('statistics.name');
+    }
+
    
     public $userCount;
     public $verifiedUsersCount;

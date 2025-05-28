@@ -3,7 +3,7 @@
         {{-- Total Courses --}}
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
             <div>
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Courses</p>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400"> {{ __('total_courses') }} </p>
                 <h3 class="text-2xl font-bold text-blue-600 mt-1">{{ $courseCount }}</h3>
             </div>
             <div class="bg-blue-100 dark:bg-blue-900 p-2.5 rounded-full">
@@ -16,7 +16,7 @@
         {{-- Total Lessons --}}
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
             <div>
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Lessons</p>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('total_lessons') }} </p>
                 <h3 class="text-2xl font-bold text-indigo-600 mt-1">{{ $lessonCount }}</h3>
             </div>
             <div class="bg-indigo-100 dark:bg-indigo-900 p-2.5 rounded-full">
@@ -29,7 +29,7 @@
         {{-- Total Enrollments --}}
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
             <div>
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Enrollments</p>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('total_enrollments') }}</p>
                 <h3 class="text-2xl font-bold text-green-600 mt-1">{{ $enrollmentCount }}</h3>
             </div>
             <div class="bg-green-100 dark:bg-green-900 p-2.5 rounded-full">
@@ -42,7 +42,7 @@
         {{-- Total Users --}}
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-4 flex items-center justify-between border border-gray-200 dark:border-gray-700 min-h-[110px]">
             <div>
-                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Users</p>
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ __('total_users') }}</p>
                 <h3 class="text-2xl font-bold text-purple-600 mt-1">{{ $userCount }}</h3>
             </div>
             <div class="bg-purple-100 dark:bg-purple-900 p-2.5 rounded-full">
@@ -55,7 +55,7 @@
 
 {{-- Top Courses Section --}}
 <div class="mb-10">
-    <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Top 5 Popular Courses</h2>
+    <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">{{ __('top_popular_courses') }}</h2>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach($popularCourses as $course)
@@ -65,7 +65,7 @@
                         {{ $course->title }}
                     </p>
                     <h3 class="text-xl font-bold text-blue-600 mt-1">
-                        {{ $course->enrollments_count }} Enrollments
+                        {{ $course->enrollments_count }} {{ __('total_users') }}
                     </h3>
                 </div>
                 <div class="bg-blue-100 dark:bg-blue-900 p-2.5 rounded-full shrink-0">

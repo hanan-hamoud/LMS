@@ -49,5 +49,12 @@
   "lessons.order": "الترتيب",
   "lessons.created_at": "تاريخ الإنشاء",
   "lessons.updated_at": "تاريخ التعديل",
-  "filament.resources.Lesson": "الدروس"
+  "filament.resources.Lesson": "الدروس",
+  "statistics.name":"احصائيات ",
+  "total_courses": "إجمالي الدورات",
+  "total_lessons": "إجمالي الدروس",
+  "total_enrollments": "إجمالي التسجيلات",
+  "total_users": "المستخدمين",
+  "top_popular_courses": "أكثر 5 دورات شيوعاً",
+  "enrollments": "التسجيلات"
 }
