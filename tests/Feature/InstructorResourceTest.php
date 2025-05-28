@@ -15,10 +15,10 @@ use Illuminate\Support\Facades\Storage;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-function createAdminUser(): User
-{
-    return User::factory()->create();
-}
+// function createAdminUser(): User
+// {
+//     return User::factory()->create();
+// }
 
 it('can list instructor', function () {
     $instructors = Instructor::factory()->count(10)->create();

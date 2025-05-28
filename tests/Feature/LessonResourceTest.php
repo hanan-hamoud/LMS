@@ -12,10 +12,10 @@ use App\Models\Course;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-function createAdminUser(): User
-{
-    return User::factory()->create();
-}
+// function createAdminUser(): User
+// {
+//     return User::factory()->create();
+// }
 
 it('can list lesson', function () {
     $lesson = Lesson::factory()->count(10)->create();

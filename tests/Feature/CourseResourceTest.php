@@ -11,12 +11,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-function actingAsAdmin(): User
-{
-    $admin = User::factory()->create();
-    actingAs($admin);
-    return $admin;
-}
+
 
 it('can list courses', function () {
     $courses = Course::factory()->count(10)->create();
@@ -26,7 +21,8 @@ it('can list courses', function () {
 });
 
 it('can create a new course', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $category = \App\Models\CourseCategory::factory()->create();
     $instructor = \App\Models\Instructor::factory()->create();
@@ -52,7 +48,9 @@ it('can create a new course', function () {
 });
 
 it('can update a course', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
+
 
     $category = \App\Models\CourseCategory::factory()->create();
     $instructor = \App\Models\Instructor::factory()->create();
@@ -83,7 +81,9 @@ it('can update a course', function () {
 });
 
 it('can delete a course', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
+
 
     $course = Course::factory()->create();
 
@@ -96,7 +96,8 @@ it('can delete a course', function () {
 });
 
 it('fails to create course with invalid data', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     Livewire::test(CreateCourse::class)
         ->fillForm([
@@ -117,7 +118,9 @@ it('fails to create course with invalid data', function () {
 
 
 it('requires title, description, category_id, and instructor_id when creating', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
+
 
     Livewire::test(CreateCourse::class)
         ->call('create')
@@ -129,7 +132,9 @@ it('requires title, description, category_id, and instructor_id when creating', 
         ]);
 });
 it('can sort by category_id and instructor_id', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
+
 
     $courseA = Course::factory()->create(['category_id' => 1]);
     $courseB = Course::factory()->create(['category_id' => 2]);
@@ -139,7 +144,9 @@ it('can sort by category_id and instructor_id', function () {
         ->assertCanSeeTableRecords([$courseA, $courseB]);
 });
 it('displays all form fields when creating', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
+
 
     Livewire::test(CreateCourse::class)
         ->assertFormFieldExists('title')
@@ -151,7 +158,9 @@ it('displays all form fields when creating', function () {
 
 
 it('can bulk delete courses', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
+
 
     $courses = Course::factory()->count(3)->create();
 
