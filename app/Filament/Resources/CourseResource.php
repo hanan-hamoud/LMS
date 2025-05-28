@@ -31,16 +31,23 @@ class CourseResource extends BaseResource
                 Forms\Components\Textarea::make('description')
                     ->required()
                     ->columnSpanFull(),
-                Forms\Components\TextInput::make('category_id')
+                Forms\Components\Select::make('category_id')
+                    ->label('Category')
                     ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('instructor_id')
+                    ->options(function () {
+                        return \App\Models\CourseCategory::all()->pluck('name', 'id')->toArray();
+                    }),
+                Forms\Components\Select::make('instructor_id')
+                    ->label('Instructor')
                     ->required()
-                    ->numeric(),
+                    ->options(function () {
+                        return \App\Models\Instructor::all()->pluck('name', 'id')->toArray();
+                    }),
                 Forms\Components\Toggle::make('status')
                     ->required(),
             ]);
     }
+    
 
     public static function table(Table $table): Table
     {
