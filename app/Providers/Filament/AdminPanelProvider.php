@@ -17,7 +17,9 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-//use BezhanSalleh\FilamentLanguageSwitch\FilamentLanguageSwitchPlugin;
+//use Bezhansalleh\FilamentLanguageSwitch\FilamentLanguageSwitchPlugin;
+
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -41,7 +43,13 @@ class AdminPanelProvider extends PanelProvider
                 'link' => Color::hex('#2563EB'),  
             
             ])
-            
+            // ->plugins([
+            //     FilamentLanguageSwitchPlugin::make()
+            //         ->locales([
+            //             'ar' => 'العربية',
+            //             'en' => 'English',
+            //         ]),
+            // ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
@@ -53,6 +61,7 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
+                \App\Http\Middleware\SetLocale::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,

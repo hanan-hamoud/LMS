@@ -2,14 +2,22 @@
 
     {{-- زر تغيير اللغة --}}
     <div class="mb-4">
-        <form method="POST" action="{{ route('filament.language.toggle') }}">
+        <form method="POST" action="{{ route('locale.switch') }}">
             @csrf
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                {{ app()->getLocale() === 'ar' ? 'Switch to English' : 'التبديل إلى العربية' }}
-            </button>
-        </form>
-    </div>
+            <select name="locale" onchange="this.form.submit()">
+                <option value="ar" {{ app()->getLocale() == 'ar' ? 'selected' : '' }}>العربية</option>
+                <option value="en" {{ app()->getLocale() == 'en' ? 'selected' : '' }}>English</option>
 
+                
+            </select>
+        </form>
+        
+    </div>
+    <div class="mb-4 flex gap-4">
+        <a href="{{ route('lang.switch', 'ar') }}">🇸🇦 العربية</a>
+        <a href="{{ route('lang.switch', 'en') }}">🇬🇧 English</a>
+    </div>
+    
     @if (method_exists($this, 'filtersForm'))
         {{ $this->filtersForm }}
     @endif
