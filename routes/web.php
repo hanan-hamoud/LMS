@@ -6,12 +6,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/change-locale', function () {
+    $locale = session('locale', config('app.locale')) === 'ar' ? 'en' : 'ar';
+    session()->put('locale', $locale);
+    return redirect()->back();
+})->name('change-locale');
 
-// Route::get('/change-locale', function () {
-//     $newLocale = session('locale') === 'ar' ? 'en' : 'ar';
-//     session(['locale' => $newLocale]);
-//     app()->setLocale($newLocale);
-//     return back();
-// })->name('change-locale');
+
+
 
 Route::get('/login', fn () => 'Login Page')->name('login');

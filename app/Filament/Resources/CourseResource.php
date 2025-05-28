@@ -102,4 +102,15 @@ class CourseResource extends BaseResource
             'edit' => Pages\EditCourse::route('/{record}/edit'),
         ];
     }
+    public static function getNavigationLabel(): string
+    {
+        return __('filament.resources.Course');
+    }
+    
+    public static function getModelLabel(): string
+    {
+        return __('filament.resources.Course');
+    }
+    
+
 }

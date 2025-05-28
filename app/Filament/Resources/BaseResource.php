@@ -14,4 +14,5 @@ abstract class BaseResource extends Resource
             SoftDeletingScope::class,
         ]);
     }
+
 }
