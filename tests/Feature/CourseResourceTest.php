@@ -8,7 +8,7 @@ use App\Filament\Resources\CourseResource\Pages\CreateCourse;
 use App\Filament\Resources\CourseResource\Pages\EditCourse;
 use App\Filament\Resources\CourseResource\Pages\ListCourses;
 use Filament\Actions\DeleteAction;
-
+use Filament\Tables\Actions\DeleteBulkAction;
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 function actingAsAdmin(): User
@@ -94,3 +94,73 @@ it('can delete a course', function () {
         'id' => $course->id,
     ]);
 });
+
+it('fails to create course with invalid data', function () {
+    actingAsAdmin();
+
+    Livewire::test(CreateCourse::class)
+        ->fillForm([
+            'title' => '', 
+            'description' => '', 
+            'status' => null,
+            'category_id' => 'invalid', 
+            'instructor_id' => null,
+        ])
+        ->call('create')
+        ->assertHasFormErrors([
+            'title' => 'required',
+            'description' => 'required',
+            'category_id' => 'numeric',
+            'instructor_id' => 'required',
+        ]);
+});
+
+
+it('requires title, description, category_id, and instructor_id when creating', function () {
+    actingAsAdmin();
+
+    Livewire::test(CreateCourse::class)
+        ->call('create')
+        ->assertHasFormErrors([
+            'title' => 'required',
+            'description' => 'required',
+            'category_id' => 'required',
+            'instructor_id' => 'required',
+        ]);
+});
+it('can sort by category_id and instructor_id', function () {
+    actingAsAdmin();
+
+    $courseA = Course::factory()->create(['category_id' => 1]);
+    $courseB = Course::factory()->create(['category_id' => 2]);
+
+    Livewire::test(ListCourses::class)
+        ->sortTable('category_id', 'asc')
+        ->assertCanSeeTableRecords([$courseA, $courseB]);
+});
+it('displays all form fields when creating', function () {
+    actingAsAdmin();
+
+    Livewire::test(CreateCourse::class)
+        ->assertFormFieldExists('title')
+        ->assertFormFieldExists('description')
+        ->assertFormFieldExists('category_id')
+        ->assertFormFieldExists('instructor_id')
+        ->assertFormFieldExists('status');
+});
+
+
+it('can bulk delete courses', function () {
+    actingAsAdmin();
+
+    $courses = Course::factory()->count(3)->create();
+
+    Livewire::test(ListCourses::class)
+        ->callTableBulkAction(DeleteBulkAction::make()->getName(), $courses->pluck('id')->toArray())
+        ->assertHasNoTableBulkActionErrors();
+
+    foreach ($courses as $course) {
+        $this->assertSoftDeleted($course);
+    }
+});
+

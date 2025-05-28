@@ -54,6 +54,7 @@ class LessonResource extends BaseResource
                 Forms\Components\TextInput::make('video_url')
                     ->label(__('lessons.video_url'))
                     ->required()
+                    ->url() 
                     ->maxLength(255),
 
                 Forms\Components\Toggle::make('is_preview')

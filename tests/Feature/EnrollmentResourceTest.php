@@ -3,14 +3,13 @@
 use function Pest\Laravel\actingAs;
 use App\Models\User;
 use App\Models\Enrollment;
+use App\Models\Course;
 use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\Test;
 use App\Filament\Resources\EnrollmentResource\Pages\CreateEnrollment;
 use App\Filament\Resources\EnrollmentResource\Pages\EditEnrollment;
 use App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments;
 use Filament\Actions\DeleteAction;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Course;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
@@ -19,11 +18,11 @@ function createAdminUser(): User
     return User::factory()->create();
 }
 
-it('can list enrollment', function () {
-    $enrollment = Enrollment::factory()->count(10)->create();
+it('can list enrollments', function () {
+    $enrollments = Enrollment::factory()->count(10)->create();
 
-    Livewire::test(\App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments::class)
-        ->assertCanSeeTableRecords($enrollment);
+    Livewire::test(ListEnrollments::class)
+        ->assertCanSeeTableRecords($enrollments);
 });
 
 it('can create a new enrollment', function () {
@@ -43,26 +42,10 @@ it('can create a new enrollment', function () {
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('enrollments', [
-        'status' => true,
-    ]);
+    expect(Enrollment::where('user_id', $user->id)->where('course_id', $course->id)->exists())->toBeTrue();
 });
 
-it('can delete a enrollment', function () {
-    $admin = createAdminUser();
-    actingAs($admin);
-
-    $enrollment = Enrollment::factory()->create();
-
-    Livewire::test(EditEnrollment::class, ['record' => $enrollment->getKey()])
-        ->callAction(DeleteAction::class);
-
-    $this->assertSoftDeleted('enrollments', [
-        'id' => $enrollment->id,
-    ]);
-});
-
-it('can update a enrollment', function () {
+it('can update an enrollment', function () {
     $admin = createAdminUser();
     actingAs($admin);
 
@@ -85,7 +68,58 @@ it('can update a enrollment', function () {
         ->call('save')
         ->assertHasNoFormErrors();
 
-    $enrollment->refresh();
+    expect((bool) $enrollment->fresh()->status)->toBeFalse();
+});
 
-    expect((bool) $enrollment->status)->toBeFalse();
+it('can delete an enrollment', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
+
+    $enrollment = Enrollment::factory()->create();
+
+    Livewire::test(EditEnrollment::class, ['record' => $enrollment->getKey()])
+        ->callAction(DeleteAction::class);
+
+    $this->assertSoftDeleted('enrollments', [
+        'id' => $enrollment->id,
+    ]);
+});
+
+it('validates duplicate enrollment prevention', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
+
+    $user = User::factory()->create();
+    $course = Course::factory()->create();
+    Enrollment::create([
+        'user_id' => $user->id,
+        'course_id' => $course->id,
+        'enrolled_at' => now(),
+        'status' => true,
+    ]);
+
+    Livewire::test(CreateEnrollment::class)
+        ->fillForm([
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+            'enrolled_at' => now(),
+            'status' => true,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['course_id']);
+});
+
+it('requires user_id and course_id when creating enrollment', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
+
+    Livewire::test(CreateEnrollment::class)
+        ->fillForm([
+            'user_id' => null,
+            'course_id' => null,
+            'enrolled_at' => now(),
+            'status' => true,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['user_id', 'course_id']);
 });

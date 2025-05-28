@@ -107,3 +107,83 @@ it('can delete an instructor', function () {
         'id' => $instructor->id,
     ]);
 });
+it('fails to create instructor with invalid data', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
+
+    Livewire::test(CreateInstructor::class)
+        ->fillForm([
+            'name' => '',
+            'bio' => '',
+            'status' => null,
+        ])
+        ->call('create')
+        ->assertHasFormErrors(['name', 'email', 'bio', 'status']);
+});
+
+it('fails to update instructor with duplicate email', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
+
+    $existing = Instructor::factory()->create(['email' => 'existing@example.com']);
+    $instructor = Instructor::factory()->create();
+
+    Livewire::test(EditInstructor::class, ['record' => $instructor->getKey()])
+        ->fillForm([
+            'name' => 'Test',
+            'email' => 'existing@example.com', 
+            'bio' => 'Bio',
+            'status' => true,
+        ])
+        ->call('save')
+        ->assertHasFormErrors(['email']);
+});
+it('displays instructor photo in table', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
+
+    Storage::fake('public');
+    $photo = UploadedFile::fake()->image('photo.jpg');
+
+    $instructor = Instructor::factory()->create([
+        'photo' => $photo->store('instructors', 'public'),
+    ]);
+
+    Livewire::test(\App\Filament\Resources\InstructorResource\Pages\ListInstructors::class)
+        ->assertCanSeeTableRecords([$instructor])
+        ->assertSee($instructor->name)
+        ->assertSee($instructor->email);
+});
+
+
+it('can update instructor with same email without triggering unique error', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
+
+    Storage::fake('public');
+
+    
+    $photoPath = UploadedFile::fake()->image('photo.jpg')->store('instructors', 'public');
+
+    $instructor = Instructor::factory()->create([
+        'email' => 'same@example.com',
+        'photo' => $photoPath, 
+    ]);
+
+    Livewire::test(EditInstructor::class, ['record' => $instructor->getKey()])
+        ->fillForm([
+            'name' => 'Updated Name',
+            'email' => 'same@example.com', 
+            'bio' => 'Updated bio',
+            'status' => true,
+          
+        ])
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    $instructor->refresh();
+
+    expect($instructor->name)->toBe('Updated Name');
+    expect($instructor->email)->toBe('same@example.com');
+    expect($instructor->photo)->toBe($photoPath); 
+});
