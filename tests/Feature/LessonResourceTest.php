@@ -12,7 +12,6 @@ use App\Models\Course;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-// دالة فقط لإنشاء المستخدم الإداري وإرجاعه
 function createAdminUser(): User
 {
     return User::factory()->create();
