@@ -8,19 +8,16 @@ use PHPUnit\Framework\Attributes\Test;
 use App\Filament\Resources\LessonResource\Pages\CreateLesson;
 use App\Filament\Resources\LessonResource\Pages\EditLesson;
 use Filament\Actions\DeleteAction;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
-use Filament\Actions\CreateAction;
-use Filament\Actions\EditAction;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-function actingAsAdmin()
+// دالة فقط لإنشاء المستخدم الإداري وإرجاعه
+function createAdminUser(): User
 {
-    $admin = \App\Models\User::factory()->create();
-    $this->actingAs($admin);
-    return $admin;
+    return User::factory()->create();
 }
+
 it('can list lesson', function () {
     $lesson = Lesson::factory()->count(10)->create();
 
@@ -29,7 +26,8 @@ it('can list lesson', function () {
 });
 
 it('can create a new lesson', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $course = Course::factory()->create();
 
@@ -42,7 +40,7 @@ it('can create a new lesson', function () {
             'is_preview' => false,
             'order' => 1,
         ])
-        ->call('create') 
+        ->call('create')
         ->assertHasNoFormErrors();
 
     $this->assertDatabaseHas('lessons', [
@@ -52,7 +50,8 @@ it('can create a new lesson', function () {
 });
 
 it('can update a lesson', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $course = Course::factory()->create();
     $lesson = Lesson::factory()->create(['course_id' => $course->id]);
@@ -61,7 +60,7 @@ it('can update a lesson', function () {
         ->fillForm([
             'title' => 'Updated Title',
         ])
-        ->call('save') 
+        ->call('save')
         ->assertHasNoFormErrors();
 
     $lesson->refresh();
@@ -70,7 +69,8 @@ it('can update a lesson', function () {
 });
 
 it('can delete a lesson', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $lesson = Lesson::factory()->create();
 

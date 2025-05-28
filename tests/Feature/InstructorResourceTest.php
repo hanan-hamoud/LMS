@@ -13,27 +13,25 @@ use App\Models\Course;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
-
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-function actingAsAdmin(): User
+function createAdminUser(): User
 {
-    $admin = User::factory()->create();
-    $this->actingAs($admin);
-    return $admin;
+    return User::factory()->create();
 }
 
 it('can list instructor', function () {
-    $instructor = Instructor::factory()->count(10)->create();
+    $instructors = Instructor::factory()->count(10)->create();
 
     Livewire::test(\App\Filament\Resources\InstructorResource\Pages\ListInstructors::class)
-        ->assertCanSeeTableRecords($instructor);
+        ->assertCanSeeTableRecords($instructors);
 });
 
 it('can create a new instructor', function () {
     Storage::fake('public');
 
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $fakePhoto = UploadedFile::fake()->image('photo.png');
 
@@ -54,6 +52,7 @@ it('can create a new instructor', function () {
         'bio' => 'programming',
         'status' => true,
     ]);
+
     $instructor = Instructor::where('email', 'hanan2001hamoud121@gmail.com')->first();
 
     Storage::disk('public')->assertExists($instructor->photo);
@@ -62,7 +61,8 @@ it('can create a new instructor', function () {
 it('can update an instructor', function () {
     Storage::fake('public');
 
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $instructor = Instructor::factory()->create([
         'name' => 'Old Name',
@@ -89,14 +89,14 @@ it('can update an instructor', function () {
     expect($instructor->name)->toBe('New Name');
     expect($instructor->email)->toBe('new@example.com');
     expect($instructor->bio)->toBe('New bio');
-    expect((bool) $instructor->status)->toEqual(false);
+    expect((bool) $instructor->status)->toBeFalse();
 
-    // التحقق من وجود الصورة حسب ما تم تخزينه فعليًا
     Storage::disk('public')->assertExists($instructor->photo);
 });
 
 it('can delete an instructor', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $instructor = Instructor::factory()->create();
 
@@ -107,39 +107,3 @@ it('can delete an instructor', function () {
         'id' => $instructor->id,
     ]);
 });
-
-// #[Test]
-// public function it_can_delete_a_enrollment(): void
-// {
-//     $this->actingAsAdmin();
-//     $enrollment = Enrollment::factory()->create();
-//     Livewire::test(EditEnrollment::class, ['record' => $enrollment->getKey()])
-//         ->callAction(DeleteAction::class);
-//     $this->assertSoftDeleted('enrollments', [
-//         'id' => $enrollment->id,
-//     ]);
-// }
-// #[Test]
-// public function it_can_update_a_enrollment(): void
-// {
-//     $this->actingAsAdmin();
-//     $user = User::factory()->create();
-//     $course = Course::factory()->create();
-//     $enrollment = Enrollment::create([
-//         'user_id'=>$user->id,
-//         'course_id'=>$course->id,
-//         'enrolled_at' => now(),
-//         'status' => true,
-//     ]);
-//     Livewire::test(EditEnrollment::class, ['record' => $enrollment->getKey()])
-//         ->fillForm([
-//             'user_id'=>$user->id,
-//             'course_id'=>$course->id,
-//             'enrolled_at' => now(),
-//             'status' => false,
-//         ])
-//         ->call('save')
-//         ->assertHasNoFormErrors();
-//     $enrollment->refresh();
-//     $this->assertSame(false, $enrollment->status);
-// }

@@ -14,12 +14,11 @@ use App\Models\Course;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-function actingAsAdmin(): User
+function createAdminUser(): User
 {
-    $admin = User::factory()->create();
-    $this->actingAs($admin);
-    return $admin;
+    return User::factory()->create();
 }
+
 it('can list enrollment', function () {
     $enrollment = Enrollment::factory()->count(10)->create();
 
@@ -28,13 +27,16 @@ it('can list enrollment', function () {
 });
 
 it('can create a new enrollment', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
+
     $user = User::factory()->create();
     $course = Course::factory()->create();
+
     Livewire::test(CreateEnrollment::class)
         ->fillForm([
-            'user_id'=>$user->id,
-            'course_id'=>$course->id,
+            'user_id' => $user->id,
+            'course_id' => $course->id,
             'enrolled_at' => now(),
             'status' => true,
         ])
@@ -47,7 +49,8 @@ it('can create a new enrollment', function () {
 });
 
 it('can delete a enrollment', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $enrollment = Enrollment::factory()->create();
 
@@ -60,21 +63,22 @@ it('can delete a enrollment', function () {
 });
 
 it('can update a enrollment', function () {
-    actingAsAdmin();
+    $admin = createAdminUser();
+    actingAs($admin);
 
     $user = User::factory()->create();
     $course = Course::factory()->create();
     $enrollment = Enrollment::create([
-        'user_id'=>$user->id,
-        'course_id'=>$course->id,
+        'user_id' => $user->id,
+        'course_id' => $course->id,
         'enrolled_at' => now(),
         'status' => true,
     ]);
 
     Livewire::test(EditEnrollment::class, ['record' => $enrollment->getKey()])
         ->fillForm([
-            'user_id'=>$user->id,
-            'course_id'=>$course->id,
+            'user_id' => $user->id,
+            'course_id' => $course->id,
             'enrolled_at' => now(),
             'status' => false,
         ])
@@ -83,5 +87,5 @@ it('can update a enrollment', function () {
 
     $enrollment->refresh();
 
-    expect($enrollment->status)->toBe(false);
+    expect((bool) $enrollment->status)->toBeFalse();
 });
