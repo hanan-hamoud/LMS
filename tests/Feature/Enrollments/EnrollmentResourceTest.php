@@ -1,66 +1,53 @@
 <?php
 
-namespace Tests\Feature;
 use function Pest\Laravel\actingAs;
 use App\Models\User;
 use App\Models\Enrollment;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
 use App\Filament\Resources\EnrollmentResource\Pages\CreateEnrollment;
 use App\Filament\Resources\EnrollmentResource\Pages\EditEnrollment;
 use App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments;
 use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Course;
-class EnrollmentResourceTest extends TestCase
+
+uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+
+function actingAsAdmin(): User
 {
-    use RefreshDatabase;
+    $admin = User::factory()->create();
+    $this->actingAs($admin);
+    return $admin;
+}
+it('can list enrollment', function () {
+    $enrollment = Enrollment::factory()->count(10)->create();
 
-    private function actingAsAdmin(): User
-    {
-        $admin = User::factory()->create();
-        $this->actingAs($admin);
-        return $admin;
-    }
-    #[Test]
-  
-    public function it_can_list_enrollment()
-    {
-        $enrollment = Enrollment::factory()->count(10)->create();
-    
-        Livewire::test(\App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments::class)
-            ->assertCanSeeTableRecords($enrollment);
-    }
-   
+    Livewire::test(\App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments::class)
+        ->assertCanSeeTableRecords($enrollment);
+});
 
-    #[Test]
-    public function it_can_create_a_new_enrollment(): void
-    {
-        $this->actingAsAdmin();
-        $user = User::factory()->create();
-        $course = Course::factory()->create();
-        Livewire::test(CreateEnrollment::class)
-            ->fillForm([
-                'user_id'=>$user->id,
-                'course_id'=>$course->id,
-                'enrolled_at' => now(),
-                'status' => true,
-            ])
-            ->call('create')
-            ->assertHasNoFormErrors();
-
-        $this->assertDatabaseHas('enrollments', [
+it('can create a new enrollment', function () {
+    actingAsAdmin();
+    $user = User::factory()->create();
+    $course = Course::factory()->create();
+    Livewire::test(CreateEnrollment::class)
+        ->fillForm([
+            'user_id'=>$user->id,
+            'course_id'=>$course->id,
+            'enrolled_at' => now(),
             'status' => true,
-        ]);
-    }
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors();
 
-   
-#[Test]
-public function it_can_delete_a_enrollment(): void
-{
-    $this->actingAsAdmin();
+    $this->assertDatabaseHas('enrollments', [
+        'status' => true,
+    ]);
+});
+
+it('can delete a enrollment', function () {
+    actingAsAdmin();
 
     $enrollment = Enrollment::factory()->create();
 
@@ -70,14 +57,10 @@ public function it_can_delete_a_enrollment(): void
     $this->assertSoftDeleted('enrollments', [
         'id' => $enrollment->id,
     ]);
-}
+});
 
-
- 
-#[Test]
-public function it_can_update_a_enrollment(): void
-{
-    $this->actingAsAdmin();
+it('can update a enrollment', function () {
+    actingAsAdmin();
 
     $user = User::factory()->create();
     $course = Course::factory()->create();
@@ -100,10 +83,5 @@ public function it_can_update_a_enrollment(): void
 
     $enrollment->refresh();
 
-    $this->assertSame(false, $enrollment->status);
-}
-
-
-}
-
-
+    expect($enrollment->status)->toBe(false);
+});
