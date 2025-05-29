@@ -4,7 +4,7 @@ use App\Filament\Resources\CourseCategoryResource;
 use App\Models\CourseCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use function Pest\Livewire\livewire;
-
+use function Pest\Laravel\actingAs;
 
 it('can render create form', function () {
     livewire(CourseCategoryResource\Pages\CreateCourseCategory::class)
@@ -31,6 +31,8 @@ it('can validate form input', function () {
 });
 
 it('can create a new course category', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
     livewire(CourseCategoryResource\Pages\CreateCourseCategory::class)
         ->fillForm([
             'name' => 'New Category',
@@ -43,6 +45,8 @@ it('can create a new course category', function () {
 });
 
 it('can list course categories', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
     $categories = CourseCategory::factory()->count(3)->create();
 
     livewire(CourseCategoryResource\Pages\ListCourseCategories::class)
@@ -50,6 +54,8 @@ it('can list course categories', function () {
 });
 
 it('can render edit form with correct data', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
     $category = CourseCategory::factory()->create();
 
     livewire(CourseCategoryResource\Pages\EditCourseCategory::class, [
@@ -62,6 +68,8 @@ it('can render edit form with correct data', function () {
 });
 
 it('can update a course category', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
     $category = CourseCategory::factory()->create(['name' => 'Old Name', 'status' => true]);
 
     livewire(CourseCategoryResource\Pages\EditCourseCategory::class, [
@@ -81,6 +89,8 @@ it('can update a course category', function () {
 });
 
 it('can delete a course category', function () {
+    $admin = createAdminUser();
+    actingAs($admin);
     $category = CourseCategory::factory()->create();
 
     livewire(CourseCategoryResource\Pages\EditCourseCategory::class, [

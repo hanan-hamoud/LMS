@@ -20,7 +20,6 @@ it('can list lesson', function () {
 it('can create a new lesson', function () {
     $admin = createAdminUser();
     actingAs($admin);
-
     $course = Course::factory()->create();
 
     Livewire::test(CreateLesson::class)
