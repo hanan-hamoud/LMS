@@ -11,13 +11,6 @@ use App\Filament\Resources\EnrollmentResource\Pages\EditEnrollment;
 use App\Filament\Resources\EnrollmentResource\Pages\ListEnrollments;
 use Filament\Actions\DeleteAction;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
-// function createAdminUser(): User
-// {
-//     return User::factory()->create();
-// }
-
 it('can list enrollments', function () {
     $enrollments = Enrollment::factory()->count(10)->create();
 

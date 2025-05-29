@@ -9,8 +9,6 @@ use App\Filament\Resources\CourseResource\Pages\EditCourse;
 use App\Filament\Resources\CourseResource\Pages\ListCourses;
 use Filament\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 
 
 it('can list courses', function () {
