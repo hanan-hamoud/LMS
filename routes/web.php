@@ -9,58 +9,20 @@ Route::get('/', function () {
 });
 
 
-// Route::post('/language-switch', function () {
-//     $newLocale = app()->getLocale() === 'ar' ? 'en' : 'ar';
-//     session(['locale' => $newLocale]);
-//     app()->setLocale($newLocale);
-    
-//     return redirect()->back()->with('success', 'Language changed successfully');
-// })->name('language.switch');
 
-Route::get('/lang/{locale}', function ($locale) {
-    if (!in_array($locale, ['en', 'ar'])) {
-        abort(400);
-    }
-    session(['locale' => $locale]);
-    return back();
-})->name('lang.switch');
 
-Route::post('/filament/language-toggle', function () {
-    $current = session('locale', config('app.locale'));
-    $newLocale = $current === 'ar' ? 'en' : 'ar';
-    session(['locale' => $newLocale]);
-    app()->setLocale($newLocale);
 
+
+
+
+Route::get('/switch-locale', function (\Illuminate\Http\Request $request) {
+    $locale = $request->input('locale', config('app.locale'));
+    session()->put('locale', $locale);
     return redirect()->back();
-})->name('filament.language.toggle');
-
-// Route::post('/language-switch', function () {
-//     $locale = App::getLocale() === 'ar' ? 'en' : 'ar';
-//     Session::put('locale', $locale);
-//     App::setLocale($locale);
-//     return Redirect::back();
-// })->name('language.switch');
-
-Route::get('/admin/lang/{locale}', function ($locale, Request $request) {
-    $availableLocales = ['ar', 'en'];
-
-    if (in_array($locale, $availableLocales)) {
-        Session::put('locale', $locale);
-    }
-
-    // إعادة التوجيه للصفحة السابقة
-    return redirect()->back();
-})->name('admin.lang.switch');
-
-
-
-Route::post('/switch-locale', function (\Illuminate\Http\Request $request) {
-    $locale = $request->input('locale');
-    if (in_array($locale, ['en', 'ar'])) {
-        session(['locale' => $locale]);
-    }
-    return back();
 })->name('locale.switch');
+
+
+
 
 
 Route::get('/login', fn () => 'Login Page')->name('login');

@@ -1,7 +1,7 @@
 <x-filament-panels::page class="fi-dashboard-page">
 
     {{-- زر تغيير اللغة --}}
-    <div class="mb-4">
+    {{-- <div class="mb-4">
         <form method="POST" action="{{ route('locale.switch') }}">
             @csrf
             <select name="locale" onchange="this.form.submit()">
@@ -13,10 +13,12 @@
         </form>
         
     </div>
-    <div class="mb-4 flex gap-4">
+
+    <p>Current Locale: {{ app()->getLocale() }}</p> --}}
+    {{-- <div class="mb-4 flex gap-4">
         <a href="{{ route('lang.switch', 'ar') }}">🇸🇦 العربية</a>
         <a href="{{ route('lang.switch', 'en') }}">🇬🇧 English</a>
-    </div>
+    </div> --}}
     
     @if (method_exists($this, 'filtersForm'))
         {{ $this->filtersForm }}

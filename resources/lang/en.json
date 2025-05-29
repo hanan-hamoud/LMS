@@ -50,11 +50,14 @@
     "lessons.created_at": "Created At",
     "lessons.updated_at": "Updated At",
     "filament.resources.Lesson": "Lessons",
-"statistics.name":"Statistics",
-"total_courses": "Total Courses",
+    "statistics.name":"Statistics",
+    "total_courses": "Total Courses",
     "total_lessons": "Total Lessons",
     "total_enrollments": "Total Enrollments",
     "total_users": "Users",
     "top_popular_courses": "Top 5 Popular Courses",
-    "enrollments": "Enrollments"
+    "enrollments": "Enrollments",
+    "الإعدادات": "Settings",
+    "العربية": "Arabic",
+    "English": "English"
 }

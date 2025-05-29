@@ -18,7 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 //use Bezhansalleh\FilamentLanguageSwitch\FilamentLanguageSwitchPlugin;
-
+use App\Filament\Components\LanguageSwitcher;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -60,6 +60,8 @@ class AdminPanelProvider extends PanelProvider
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
             ])
+            ->topNavigation()
+            ->renderHook('panels::topbar.start', fn () => view('components.language-switcher'))
             ->middleware([
                 \App\Http\Middleware\SetLocale::class,
                 EncryptCookies::class,
