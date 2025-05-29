@@ -1,42 +1,52 @@
 <?php
 
 use App\Models\Course;
+use App\Models\Instructor;
+use App\Models\CourseCategory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
-test('fillable attributes', function () {
+test('it has the correct fillable attributes', function () {
     $course = new Course();
-    expect($course->getFillable())->toEqual(['title', 'description', 'category_id', 'instructor_id', 'status']);
+
+    expect($course->getFillable())->toEqual([
+        'title',
+        'description',
+        'category_id',
+        'instructor_id',
+        'status',
+    ]);
 });
 
-test('course belongs to category', function () {
+test('it belongs to a category', function () {
     $course = Course::factory()->create();
-    expect($course->category())->toBeInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo');
+
+    expect($course->category())->toBeInstanceOf(BelongsTo::class);
 });
 
-test('course belongs to instructor', function () {
+test('it belongs to an instructor', function () {
     $course = Course::factory()->create();
-    expect($course->instructor())->toBeInstanceOf('Illuminate\Database\Eloquent\Relations\BelongsTo');
+
+    expect($course->instructor())->toBeInstanceOf(BelongsTo::class);
 });
 
-test('course has many lessons', function () {
+test('it has many lessons', function () {
     $course = Course::factory()->create();
-    expect($course->lessons())->toBeInstanceOf('Illuminate\Database\Eloquent\Relations\HasMany');
+
+    expect($course->lessons())->toBeInstanceOf(HasMany::class);
 });
 
-test('course has many enrollments', function () {
+test('it has many enrollments', function () {
     $course = Course::factory()->create();
-    expect($course->enrollments())->toBeInstanceOf('Illuminate\Database\Eloquent\Relations\HasMany');
+
+    expect($course->enrollments())->toBeInstanceOf(HasMany::class);
 });
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
-#[test]
-function it_can_create_a_course()
-{
+test('it can be created with valid data', function () {
     $instructor = Instructor::create([
         'name' => 'Hanan',
         'email' => 'hanan2001hamoud@gmail.com',
-        'bio' => 'she is a programmer',
+        'bio' => 'She is a programmer',
         'photo' => 'photo.png',
         'status' => true,
     ]);
@@ -54,32 +64,34 @@ function it_can_create_a_course()
         'status' => true,
     ]);
 
+    expect($course)->toBeInstanceOf(Course::class);
+
+    expect($course->title)->toEqual('PHP Course');
+
     $this->assertDatabaseHas('courses', [
         'title' => 'PHP Course',
         'instructor_id' => $instructor->id,
         'category_id' => $category->id,
         'status' => true,
     ]);
-}
+});
 
-#[test]
-function a_course_belongs_to_an_instructor_and_category()
-{
-    $instructor = \App\Models\Instructor::create([
+test('it belongs to both instructor and category correctly', function () {
+    $instructor = Instructor::create([
         'name' => 'Hanan',
         'email' => 'hanan2001hamoud@gmail.com',
-        'bio' => 'she is a programmer',
+        'bio' => 'She is a programmer',
         'photo' => 'photo.png',
         'status' => true,
     ]);
 
-    $category = \App\Models\CourseCategory::create([
+    $category = CourseCategory::create([
         'name' => 'Programming',
         'slug' => 'programming',
         'status' => true,
     ]);
 
-    $course = \App\Models\Course::create([
+    $course = Course::create([
         'title' => 'PHP Course',
         'description' => 'Start from scratch',
         'category_id' => $category->id,
@@ -87,8 +99,8 @@ function a_course_belongs_to_an_instructor_and_category()
         'status' => true,
     ]);
 
-    $loadedCourse = \App\Models\Course::with(['instructor', 'category'])->find($course->id);
+    $loadedCourse = Course::with(['instructor', 'category'])->find($course->id);
 
     expect($loadedCourse->instructor->name)->toEqual('Hanan');
     expect($loadedCourse->category->name)->toEqual('Programming');
-}
+});

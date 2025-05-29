@@ -1,28 +1,39 @@
 <?php
 
 use App\Models\Instructor;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-
-test('fillable attributes', function () {
+test('it has correct fillable attributes', function () {
     $instructor = new Instructor();
-    expect($instructor->getFillable())->toEqual(['name', 'email', 'bio', 'photo', 'status']);
+
+    expect($instructor->getFillable())->toEqual([
+        'name',
+        'email',
+        'bio',
+        'photo',
+        'status',
+    ]);
 });
 
-test('instructor has many courses', function () {
+test('it has many courses relationship', function () {
     $instructor = Instructor::factory()->create();
-    expect($instructor->courses())->toBeInstanceOf('Illuminate\Database\Eloquent\Relations\HasMany');
+
+    expect($instructor->courses())->toBeInstanceOf(HasMany::class);
 });
 
-#[test]
-function it_can_create_instructor()
-{
-    Instructor::create([
-        'name' => 'hanan',
+test('it can be created successfully', function () {
+    $instructor = Instructor::create([
+        'name' => 'Hanan',
         'email' => 'hanan2001hamoud@gmail.com',
         'bio' => 'she is a programmer',
         'photo' => '123456.png',
         'status' => true,
     ]);
 
-    $this->assertDatabaseHas('instructors', ['email' => 'hanan2001hamoud@gmail.com']);
-}
+    expect($instructor)->toBeInstanceOf(Instructor::class);
+    expect($instructor->email)->toEqual('hanan2001hamoud@gmail.com');
+
+    $this->assertDatabaseHas('instructors', [
+        'email' => 'hanan2001hamoud@gmail.com',
+    ]);
+});

@@ -46,42 +46,7 @@ class AppServiceProvider extends ServiceProvider
     });
 }
 
-    // public function boot(): void
-    // {
-    //     Filament::serving(function () {
-    //         app()->setLocale(session('locale', config('app.locale')));
-    //     });
-    // }
-    
-    // public function boot(): void
-    // {
-    //     Filament::serving(function () {
-    //         Filament::registerNavigationItems([
-    //             NavigationItem::make(__('Change Language'))
-    //                 ->icon('heroicon-m-language')
-    //                 ->url(route('locale.switch'))
-    //                 ->sort(9999)
-    //                 ->visible(fn () => auth()->check()),
-    //         ]);
-    //     });
-    // }
-    
-    
-    
-    /**
-     * Bootstrap any application services.
-     */
-    
-    
 
-    //  public function boot(): void
-    //  {
-    //      Filament::serving(function () {
-    //          if (app()->getLocale() === 'ar') {
-    //              Filament::registerTheme('css/filament-rtl.css');
-    //          }
-    //      });
-    //  }
      
     
 }

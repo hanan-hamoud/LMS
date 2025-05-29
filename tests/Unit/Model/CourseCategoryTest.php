@@ -20,9 +20,6 @@ test('slug is generated from name', function () {
 });
 
 
-
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
-
 it('can create course category', function () {
     $category = CourseCategory::create([
         'name' => 'Programming',
