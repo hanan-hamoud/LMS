@@ -11,8 +11,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Tables\Filters\SelectFilter;
-
-class CourseCategoryResource extends Resource
+use App\Filament\Resources\BaseResource;
+class CourseCategoryResource extends BaseResource
 {
     protected static ?string $model = CourseCategory::class;
 

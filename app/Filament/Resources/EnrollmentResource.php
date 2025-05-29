@@ -11,8 +11,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Validation\Rule;
 use Filament\Forms\Get;
-
-class EnrollmentResource extends Resource
+use App\Filament\Resources\BaseResource;
+class EnrollmentResource extends BaseResource
 {
     protected static ?string $model = Enrollment::class;
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
