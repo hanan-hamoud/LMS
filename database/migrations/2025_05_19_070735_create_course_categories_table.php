@@ -14,7 +14,7 @@ return new class extends Migration
         {
             Schema::create('course_categories', function (Blueprint $table) {
                 $table->id();
-                $table->string('name')->unique();
+                $table->json('name')->unique();
                 $table->string('slug')->unique();
                 $table->boolean('status')->default(true);
                 $table->timestamps();
@@ -33,4 +33,7 @@ return new class extends Migration
             $table->dropSoftDeletes();
         });
     }
+
+    
+
 };

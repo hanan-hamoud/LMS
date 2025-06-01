@@ -5,64 +5,75 @@ use App\Models\CourseCategory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use function Pest\Livewire\livewire;
 use function Pest\Laravel\actingAs;
-
+use App\Filament\Resources\CourseCategoryResource\Pages\CreateCourseCategory;
+use App\Filament\Resources\CourseCategoryResource\Pages\EditCourseCategory;
+use App\Filament\Resources\CourseCategoryResource\Pages\ListCourseCategories;
 it('can render create form', function () {
-    livewire(CourseCategoryResource\Pages\CreateCourseCategory::class)
+    livewire(CreateCourseCategory::class)
         ->assertFormExists();
 });
 
 it('has correct form fields', function () {
-    livewire(CourseCategoryResource\Pages\CreateCourseCategory::class)
-        ->assertFormFieldExists('name')
+    livewire(CreateCourseCategory::class)
+        ->assertFormFieldExists('name_en')
+        ->assertFormFieldExists('name_ar')
         ->assertFormFieldExists('status');
 });
 
 it('can validate form input', function () {
-    livewire(CourseCategoryResource\Pages\CreateCourseCategory::class)
+    livewire(CreateCourseCategory::class)
         ->fillForm([
-            'name' => '',
+            'name_en' => '',
+            'name_ar' => '',
             'status' => null,
         ])
         ->call('create')
         ->assertHasFormErrors([
-            'name' => 'required',
+            'name_en' => 'required',
+            'name_ar' => 'required',
             'status' => 'required',
         ]);
 });
 
 it('can create a new course category', function () {
-    $admin = createAdminUser();
-    actingAs($admin);
-    livewire(CourseCategoryResource\Pages\CreateCourseCategory::class)
+    livewire(CreateCourseCategory::class)
         ->fillForm([
-            'name' => 'New Category',
+            'name_en' => 'English Name',
+            'name_ar' => 'اسم عربي',
             'status' => true,
         ])
-        ->call('create')
+        ->call('create') 
         ->assertHasNoFormErrors();
 
-    expect(CourseCategory::where('name', 'New Category')->exists())->toBeTrue();
+    $this->assertDatabaseHas('course_categories', [
+        'slug' => 'english-name',
+        'status' => 1,
+    ]);
 });
+
 
 it('can list course categories', function () {
     $admin = createAdminUser();
     actingAs($admin);
     $categories = CourseCategory::factory()->count(3)->create();
 
-    livewire(CourseCategoryResource\Pages\ListCourseCategories::class)
+    livewire(ListCourseCategories::class)
         ->assertCanSeeTableRecords($categories);
 });
 
 it('can render edit form with correct data', function () {
     $admin = createAdminUser();
     actingAs($admin);
-    $category = CourseCategory::factory()->create();
+    $category = CourseCategory::factory()->create([
+        'name' => ['en' => 'English Name', 'ar' => 'الاسم العربي'],
+    ]);
 
-    livewire(CourseCategoryResource\Pages\EditCourseCategory::class, [
+    livewire(EditCourseCategory::class, [
         'record' => $category->id,
     ])
         ->assertFormSet([
-            'name' => $category->name,
+            'name_en' => $category->name['en'] ?? '',
+            'name_ar' => $category->name['ar'] ?? '',
             'status' => $category->status,
         ]);
 });
@@ -70,22 +81,26 @@ it('can render edit form with correct data', function () {
 it('can update a course category', function () {
     $admin = createAdminUser();
     actingAs($admin);
-    $category = CourseCategory::factory()->create(['name' => 'Old Name', 'status' => true]);
+    $category = CourseCategory::factory()->create([
+        'name' => ['en' => 'Old Name', 'ar' => 'اسم قديم'],
+        'status' => true,
+    ]);
 
-    livewire(CourseCategoryResource\Pages\EditCourseCategory::class, [
+    livewire(EditCourseCategory::class, [
         'record' => $category->id,
     ])
         ->fillForm([
-            'name' => 'Updated Name',
+            'name_en' => 'Updated Name',
+            'name_ar' => 'اسم محدث',
             'status' => false,
         ])
         ->call('save')
         ->assertHasNoFormErrors();
 
-    expect(CourseCategory::find($category->id))->toMatchArray([
-        'name' => 'Updated Name',
-        'status' => false,
-    ]);
+    $category->refresh();
+    expect($category->name['en'])->toBe('Updated Name');
+    expect($category->name['ar'])->toBe('اسم محدث');
+    expect((bool) $category->status)->toBeFalse();
 });
 
 it('can delete a course category', function () {
@@ -93,7 +108,7 @@ it('can delete a course category', function () {
     actingAs($admin);
     $category = CourseCategory::factory()->create();
 
-    livewire(CourseCategoryResource\Pages\EditCourseCategory::class, [
+    livewire(EditCourseCategory::class, [
         'record' => $category->id,
     ])
         ->callAction('delete')

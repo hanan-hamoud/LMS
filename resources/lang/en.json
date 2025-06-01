@@ -2,12 +2,18 @@
     "course_categories.singular": "Course Category",
     "course_categories.plural": "Course Categories",
     "course_categories.name": "Name",
+    "course_categories.name_en": "Name (English)",
+    "course_categories.name_ar": "Name (Arabic)",
     "course_categories.slug": "Slug",
     "course_categories.active": "Active",
     "course_categories.inactive": "Inactive",
     "course_categories.filter_by_status": "Filter by Status",
     "course_categories.created_at": "Created At",
     "course_categories.updated_at": "Updated At",
+
+ 
+
+
     "course.title": "Title",
     "course.description": "Description",
     "course.category_id": "Category",

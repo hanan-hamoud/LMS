@@ -12,7 +12,10 @@ class CourseCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->word(),
+            'name' => [
+                'en' => $this->faker->unique()->words(2, true),
+                'ar' => 'تصنيف ' . $this->faker->unique()->randomNumber(3),
+            ],
             'slug' => fake()->slug(),
             'status' => $this->faker->boolean,
         ];

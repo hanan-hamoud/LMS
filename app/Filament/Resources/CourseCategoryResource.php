@@ -11,7 +11,11 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Components\Toggle;
 use App\Filament\Resources\BaseResource;
+  use Filament\Forms\Components\TextInput;
+    use Filament\Forms\Components\Textarea;
+    
 class CourseCategoryResource extends BaseResource
 {
     protected static ?string $model = CourseCategory::class;
@@ -35,39 +39,33 @@ class CourseCategoryResource extends BaseResource
     {
         return __('course_categories.singular');
     }
-
+  
     public static function form(Form $form): Form
     {
-        return $form->schema([
-            Forms\Components\TextInput::make('name')
-                ->label(__('course_categories.name'))
-                ->required()
-                ->unique(ignoreRecord: true)
-                ->maxLength(255)
-                ->live(onBlur: true)
-                ->afterStateUpdated(function (callable $set, $state) {
-                    $set('slug', Str::slug($state));
-                }),
-
-            Forms\Components\TextInput::make('slug')
-                ->label(__('course_categories.slug'))
-                ->required()
-                ->readonly()
-                ->unique(ignoreRecord: true)
-                ->maxLength(255),
-
-            Forms\Components\Toggle::make('status')
-                ->label(__('course_categories.active'))
-                ->required()
-                ->default(true),
-        ]);
+        return $form
+            ->schema([
+                TextInput::make('name_en')
+                ->label('Name (English)')
+                ->required(),
+            
+            TextInput::make('name_ar')
+                ->label('Name (Arabic)')
+                ->required(),
+            
+            Toggle::make('status')
+                ->label('Status')
+                ->required(),
+           
+            ])
+            ->columns(2);
     }
+    
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('translated_name')
                     ->label(__('course_categories.name'))
                     ->sortable()
                     ->searchable(),
