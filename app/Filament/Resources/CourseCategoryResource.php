@@ -65,10 +65,23 @@ class CourseCategoryResource extends BaseResource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('translated_name')
-                    ->label(__('course_categories.name'))
-                    ->sortable()
-                    ->searchable(),
+                Tables\Columns\TextColumn::make('name')
+                ->label(__('course_categories.name'))
+                ->formatStateUsing(function ($state) {
+                    if (is_array($state)) {
+                        return $state[app()->getLocale()] ?? $state['en'] ?? '-';
+                    }
+            
+                    if (is_string($state)) {
+                        return $state; 
+                    }
+            
+                    return '-';
+                })
+                ->sortable()
+                ->searchable(),
+            
+            
 
                 Tables\Columns\TextColumn::make('slug')
                     ->label(__('course_categories.slug'))
